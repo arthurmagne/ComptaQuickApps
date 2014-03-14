@@ -1,0 +1,76 @@
+<h1 class="page-header">Suivi budget</h1>
+<form class="graph-form form-horizontal">
+  <p class="error-msg"></p>
+  <div class="form-group">
+  	<label class="checkbox-inline">
+			<input type="radio" name="graphType" value="op" class="display-op-form" checked> 
+			Suivis des opérations
+		</label>
+		<label class="checkbox-inline">
+			<input type="radio" name="graphType" class="hide-op-form" value="balance">
+			Suivis de budget
+		</label>
+		<label class="checkbox-inline">
+			<input type="radio" name="graphType" class="hide-op-form" value="pie"> 
+			Détail des opérations
+		</label>
+  </div>
+	<div class="form-group">
+		<label>
+			Numéro de compte
+		</label>
+		<select type='number' placeholder='Sélectionnez le compte' name='list_account' id='list_account'class='form-control' required></select>
+		<!--<select type="number" placeholder="" name="list_account" class="form-control" required>
+			<% if (accounts.length == 0) { %>
+				<option value=""> Aucun compte disponible</option>
+			<% }else{ %>
+				<% _.each(accounts, function(account, cpt) { %>
+					<option value="<%= account.get("account_id") %>"><%= account.get("account_name") %></option>
+				<% }); %>
+			<% } %>
+		</select>-->
+	<div class="form-group graph-op-form show">
+		<label>
+				Type d'opérations
+		</label>
+		<select type="text" placeholder="Sélectionnez le type d'opération" name="select-op-type" class="form-control" required>
+			<option value="all">Débit et Crédit</option>
+			<option value="2">Débit</option>
+			<option value="1">Crédit</option>
+		</select>
+		<select type='text' placeholder='Type de payment' name='list_type'  id='list_type' class='form-control' required>
+			<option value="all">Tous type de payement</option>
+		</select>
+
+		<input type="number" name="limit" class="form-control" placeholder="Nombre maximum d'opérations">
+
+	</div>
+
+		
+		<label class="checkbox-inline">
+			<input type="radio" name="duration" class="hide-cal" value="current" checked> 
+			Mois courant
+		</label>
+		<label class="checkbox-inline">
+			<input type="radio" name="duration" class="hide-cal" value="future">
+			 Opérations à venir
+		</label>
+		<label class="checkbox-inline">
+			<input type="radio" name="duration" class="hide-cal" value="all"> 
+			Toutes
+		</label>
+		<label class="checkbox-inline">
+			<input type="radio" name="duration" class="display-cal" value="manuel"> 
+			Sélection manuel
+	    </label>
+	    <div class="form-group calendars">
+	    	<input type="date" class="form-control" name="begin" placeholder="Début (jj/mm/aaaa)">
+	    	<input type="date" class="form-control" name="end" value="Fin (jj/mm/aaaa)">
+	    </div>
+	</div>
+  <p class="text-center"><button type="submit" class="btn btn-primary btn-lg">Générer</button>
+<hr>
+
+<div id="graphs"></div>
+
+</form>

@@ -1,0 +1,73 @@
+User:
+  columns:
+    user_id:
+      type: integer
+      primary: true
+      autoincrement: true
+    firstname:
+      type: string(255)
+    lastname:
+      type: string(255)
+    email:
+      type: string(255)
+    password:
+      type: string(255)    
+Account:
+  columns:
+    account_id:
+      type: integer
+      primary: true
+      autoincrement: true
+    user_id:
+      type: integer
+    account_name:
+      type: string(255)
+    balance:
+      type: integer
+      default: 0
+  relations:
+    User:
+      local: user_id
+      foreign: user_id
+      type: one
+      foreignType: many
+
+PaymentType:
+  columns:
+    type_id:
+      type: integer
+      primary: true
+      autoincrement: true
+    type_name:
+      type: string(255)   
+      
+Operation:
+  columns:
+    account_id:
+      type: integer
+    type_id:
+      type: integer    
+    operation_date:
+      type: date
+      notnull: true
+    operation_name:
+      type: string
+    operation_desc:
+      type: string
+    is_credit:
+      type: boolean
+      notnull: true
+    value:
+      type: integer
+  relations:
+    Account:
+      local: account_id
+      foreign: account_id
+      type: one
+      foreignType: many
+      onDelete: Cascade
+    PaymentType:
+      local: type_id
+      foreign: type_id
+      type: one
+      foreignType: many

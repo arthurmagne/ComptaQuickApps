@@ -1,0 +1,12 @@
+<% var payementTypes = object.payementTypes; %>
+<% if (payementTypes.length == 0) { %>
+	<option value=""> Aucun type de paiement disponible</option>
+<% }else{ %>
+	<% if (object.allOptions) { %>
+		<option value="all">Tous type de paiement</option>
+	<% } %>
+	<% _.each(payementTypes, function(payementType, cpt) { %>
+		<option value="<%= payementType.get("type_id") %>"><%= payementType.get("type_name") %></option>
+	<% }); %>
+<% } %>							
+

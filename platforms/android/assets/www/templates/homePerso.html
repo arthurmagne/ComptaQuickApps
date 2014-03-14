@@ -1,0 +1,56 @@
+<% console.log("l'user reçu est :"+user.user_id); %>
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#/perso">ComptaQuick</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"> <%= user.firstname %>  <%= user.lastname %></a></li>
+        <li><a href="#" id="logout">Logout</a></li>
+
+      </ul>
+      <form class="navbar-form navbar-left">
+        <input type="text" class="form-control" placeholder="Recherche...">
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <div class="display-menu-arrow"></div>
+      <ul class="nav nav-sidebar">
+        <li class="perso active"><a href="#/accountList">Liste des comptes</a></li>
+        <li class="addAccount"><a href="#/addAccount">Créer un compte</a></li>
+        <li class="graphs"><a href="#/graphs">Suivi Budget</a></li>
+        <li class="Operations drop-down">
+          <a href="#" class="drop-down-toggle">Opération <b class="caret"></b></a>
+          <ul class="drop-down-menu">
+            <li class="addDebit"><a href="#/addDebit">Débit</a></li>
+            <hr>
+            <li class="addCredit"><a href="#/addCredit">Crédit</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Épargne programmée</a></li>
+        <li class="importCSV"><a href="#/importCSV">Importer</a></li>
+        <li><a href="#">Aide</a></li>
+      </ul>        
+       
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+
+      <div id="center-page"></div>
+      
+    </div>
+  </div>
+</div>

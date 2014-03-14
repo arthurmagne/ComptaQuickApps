@@ -1,0 +1,58 @@
+.sign-up-container{
+  display: inline-block;
+  position: absolute;
+  z-index: 100;
+  opacity: 0;
+  -webkit-transition: all 1s;
+  transition: all 1s;
+  background: rgba(0,0,0,0.80);
+  width: 500px;
+  border: solid;
+  border-radius: 20px;
+  padding: 30px;
+  padding-bottom: 10px;
+  margin-top: 170px;
+  margin-left: -110px;
+}
+
+.sign-up-container.disp{
+  opacity: 1;
+}
+
+.sign-up-container input{
+  margin-bottom: 7px;
+  float: left;
+  width: 47%;
+  margin-right: 20px;
+}
+
+.sign-up-container input:nth-child(even){
+  margin-right: 0px;
+}
+
+.sign-up-container img{
+  width: 30px;
+  height: 30px;
+  margin-top: -40px;
+  margin-left: 224px;
+}
+
+@media (max-width: 768px) {
+  .sign-up-container input {
+    width: 100% !important;
+  }
+
+  .sign-up-container{
+    width: 100% !important; 
+    border: none !important;
+    border-radius: 0px !important; 
+    margin-top: 0px !important; 
+    margin-left: 0px !important; 
+    top: 0;
+    height: 100%;
+  }
+
+  #connexion-form{
+    width: auto !important;
+  }
+}

@@ -1,0 +1,41 @@
+<h1 class="page-header">Liste des comptes</h1>
+
+<% if (accounts.length == 0) { %>
+    <h2 class="text-center text-muted">Aucun compte n'a été trouvé</h2>
+    <hr>
+    <p class="text-center"><a href="#/addAccount" class="btn btn-default" >Ajouter un compte</a></p>
+
+<% }else{ %>
+
+<p class="error-msg"></p>
+
+<div class="table-responsive ">
+  <table class="table table-striped account-tab">
+    <thead>
+      <tr>
+        <th>Compte</th>
+        <th>Nom</th>
+        <th>Solde</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+  	<% _.each(accounts, function(account, cpt) { %>
+      <% var id = account.get("id"); %>
+      <tr class="clickableRow" href="#/opeTab/<%= id %>" data-value="<%= id %>">
+        <td><%= id %></td>
+        <td class="account-name-col"><%= account.get("account_name") %></td>
+        <td><%= account.get("balance") %></td>
+        <td class="delete-account" data-value="<%= id %>">Supprimer</td>
+        <td class="edit-account" data-value="<%= id %>">Éditer</td>
+      </tr>
+      </a>
+    <% }); %>
+    <tr class="add-account-btn">
+      <td colspan="6" ><a href="#/addAccount" class="add-account-td-btn">Ajouter un compte</a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<% } %>

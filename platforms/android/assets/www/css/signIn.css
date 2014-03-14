@@ -1,0 +1,80 @@
+.sign-in-container{
+  display: inline-block;
+  position: absolute;
+  z-index: 100;
+  opacity: 0;
+  -webkit-transition: all 1s;
+  transition: all 1s;
+  background: rgba(0,0,0,0.80);
+  width: 300px;
+  border: solid;
+  border-radius: 20px;
+  padding: 30px;
+  margin-top: 170px;
+  padding-bottom: 10px;
+}
+
+.sign-in-container.disp{
+  opacity: 1;
+}
+
+
+#connexion-form{
+  margin: 0 auto;
+  width: 300px;
+}
+
+.sign-in-container input:first-child{
+  margin-bottom: 7px;
+}
+
+.sign-in-container img{
+  width: 30px;
+  height: 30px;
+  margin-top: -40px;
+  margin-left: 224px;
+}
+
+
+.form-title{
+  color: white;
+}
+
+.close-btn{
+  float: right;
+  color: white;
+  text-decoration: none;
+  display: block;
+  margin-top: -17px;
+  font-size: 1.3em;
+}
+
+.form-error{
+  background: rgba(245, 177, 188, 1);
+}
+
+.error-msg{
+  color: brown;
+  margin-top: -10px;
+}
+
+
+@media (max-width: 768px) {
+  .sign-in-container input {
+    width: 100% !important;
+  }
+
+  .sign-in-container{
+    width: 100% !important; 
+    border: none !important;
+    border-radius: 0px !important; 
+    margin-top: 0px !important; 
+    margin-left: 0px !important; 
+    top: 0;
+    height: 100%;
+  }
+
+  #connexion-form{
+    width: auto !important;
+  }
+}

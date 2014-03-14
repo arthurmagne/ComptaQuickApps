@@ -1,0 +1,64 @@
+.table.table-striped .clickableRow:hover td{
+	background-color: rgb(226, 239, 250);
+	cursor: pointer;
+
+}
+
+.table.table-striped .clickableRow{
+	z-index: 10;
+}
+
+.account-tab, .ope-tab {
+	text-align: center;
+}
+
+.account-tab thead tr th, .ope-tab thead tr th{
+	text-align: center;
+}
+
+.delete-account {
+	z-index: 100;
+
+}
+.delete-account:hover, .delete-op:hover{
+	background-color: rgb(252, 201, 194) !important;
+
+}
+
+.edit-account:hover, .valid-edit:hover, .edit-op:hover, .valid-op-edit:hover{
+	background-color: rgb(194, 255, 196) !important;
+
+}
+
+.add-account-btn{
+	text-align: center;
+}
+
+.add-account-btn td{
+	background-color: #428bca !important;
+	color: white;
+	cursor: pointer;
+}
+
+.add-account-btn:hover td{
+	background-color: rgb(111, 172, 223) !important;
+}
+
+.add-account-td-btn{
+	text-decoration: none !important;
+	color: white !important;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.account-tab .account-name-col{
+	max-width: 80px !important;
+}
+
+.account-tab .account-name-col input{
+	min-width: 70px;
+}
+
+
+
