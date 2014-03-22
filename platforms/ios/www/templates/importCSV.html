@@ -1,33 +1,43 @@
-<h1 class="page-header">Importer un Relevé de compte</h1>
-<div>
-  <p>
-    <select type="number" placeholder="Sélectionnez le compte" name="list_account" class="form-control" required>
-        <% if (accounts.length == 0) { %>
-          <option value=""> Aucun compte disponible</option>
-        <% }else{ %>
-          <% _.each(accounts, function(account, cpt) { %>
-            <option value="<%= account.get("account_id") %>"><%= account.get("account_name") %></option>
-          <% }); %>
-        <% } %>
+  <div style ="">
+  <h1 class="page-header">Importer un Relevé de compte</h1>
+    <p>
+      <select type="number" placeholder="Sélectionnez le compte" name="list_account" class="form-control" required>
+          <% if (accounts.length == 0) { %>
+            <option value=""> Aucun compte disponible</option>
+          <% }else{ %>
+            <% _.each(accounts, function(account, cpt) { %>
+              <option value="<%= account.get("id") %>"><%= account.get("account_name") %></option>
+            <% }); %>
+          <% } %>
+        </select>
+    </p>
+    <p>
+      <select type="number" placeholder="Delimiteur" name="delimiteur" id="delimiteur" class="form-control" required>
+        <option value="tab">Tabulation</option>
+        <option value=";">Point-virgule</option>
+        <option value=",">Virgule</option>
       </select>
-  </p>
-  <p>
-    <select type="number" placeholder="Delimiteur" name="delimiteur" id="delimiteur" class="form-control" required>
-      <option value="tab">Tabulation</option>
-      <option value=";">Point-virgule</option>
-      <option value=",">Virgule</option>
-    </select>
-  </p>
-  <p>
-      <span class="btn btn-primary btn-file">
-        Importer un fichier <input type="file" multiple="" id="importFile">
-      </span>
-  </p>
-</div>
-<div class='table-responsive'>
-  <table class='table table-striped' id='import-table'>
-  </table>
-</div>
-<p class="text-center">
-  <button type="submit" class="btn btn-primary btn-lg" id="validImport">Valider l'ajout des opérations</button>
-</p>
+    </p>
+    <p>
+        <span class="btn btn-primary btn-file">
+          Importer un fichier <input type="file" multiple="" name="importFile" id="importFile" >
+        </span>
+    </p>
+  </div>
+
+  <div class="import-data">
+    <table class='table table-striped' id='import-table'>
+      <thead>
+        <tr>
+          <th>Date (dd/mm/yyyy)</th>
+          <th>Nom de l'opération</th>
+          <th>Description</th>
+          <th>Montant</th>
+        </tr>
+      </thead>
+      <tbody >
+      </tbody>
+    </table>  
+  </div>
+  <p class="text-center" ><button name="validImport" type="submit" class="btn btn-primary btn-lg" id="validImport" disabled="true">Valider l'ajout des opérations</button></p>
+  <p class='error-msg'></p>

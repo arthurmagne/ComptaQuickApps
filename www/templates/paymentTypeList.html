@@ -6,7 +6,7 @@
 		<option value="all">Tous type de paiement</option>
 	<% } %>
 	<% _.each(payementTypes, function(payementType, cpt) { %>
-		<option value="<%= payementType.get("type_id") %>"><%= payementType.get("type_name") %></option>
+		<option value="<%= payementType.get("id") %>"><%= payementType.get("type_name") %></option>
 	<% }); %>
 <% } %>							
 

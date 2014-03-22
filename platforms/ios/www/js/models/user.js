@@ -9,7 +9,7 @@ define([
 
     
   
-  url: 'http://netmove.fr/ComptaQuick/api/index.php/login'
+  url: 'login'
  	
 });
   // Above we have passed in jQuery, Underscore and Backbone

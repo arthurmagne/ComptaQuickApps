@@ -42,7 +42,7 @@ define([
         this.email.removeClass("form-error");
         this.password.removeClass("form-error");
         this.error_msg.html();
-        var url = 'http://netmove.fr/ComptaQuick/api/index.php/login';
+        var url = 'login';
         console.log('Loggin in... ');
         var that = this;
         var _data = this.attributes();

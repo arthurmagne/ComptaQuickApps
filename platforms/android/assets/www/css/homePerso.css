@@ -50,17 +50,45 @@
 	display: none;
 }
 
+#sync.offline{
+	color: rgb(216, 79, 79);
+}
+
+#sync.online{
+	color: rgb(138, 211, 97);
+}
+
+#syncBtn.no-sync{
+	color: white;
+}
+
+#graph-btn.off, #import-btn.off{
+	background: rgb(213, 213, 213);
+
+}
+
+#graph-btn.off a, #import-btn.off a{
+	color: rgb(187, 187, 187);
+}
+
 @media (max-width: 768px) {
 	.display-menu-arrow{
-		width: 20px;
-		height: 20px;
+		width: 34px;
+		height: 90px;
 		float: right;
 		display: block;
-		background: black;
+		background: url("../img/right-arrow.png") no-repeat;
+		background-size: 34px 90px;
 		position: absolute;
 		top: 50%;
-		left: 169px;
+		left: 145px;
 		z-index: 1000;
+
+	}
+
+	.display-menu-arrow.disp{
+		background: url("../img/left-arrow.png") no-repeat;
+		background-size: 34px 90px;
 	}
 
 }

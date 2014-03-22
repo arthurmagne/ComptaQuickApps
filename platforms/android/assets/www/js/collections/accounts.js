@@ -19,13 +19,24 @@ define([
             }
           });
         });*/
+      
 
     },
+
+    saveAll: function( ) {
+        // Loop over my collection...
+        _(this.models).each( function(account) {
+            // And POST for each object in the collection
+            console.log("Iterate : ",account);
+            account.save();
+        } );
+    },
+
     url: function() {
       console.log("On va chercher l'url");
 
       
-      return 'http://netmove.fr/ComptaQuick/api/index.php/accounts';
+      return 'accounts';
 
     }
     

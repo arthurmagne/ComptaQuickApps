@@ -25,3 +25,13 @@
     cursor: inherit;
     display: block;
 }
+
+.bs-callout-danger {
+background-color: #FDF7F7;
+border-color: #D9534F;
+}
+.bs-callout {
+margin: 20px 0;
+padding: 20px;
+border-left: 3px solid #EEE;
+}

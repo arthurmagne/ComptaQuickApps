@@ -40,7 +40,7 @@ function validateUserKey($uid, $key) {
         return false;
     }
 
-    $user = Doctrine_Core::getTable('User')->findOneByUser_idAndPassword($uid, $key);
+    $user = Doctrine_Core::getTable('User')->findOneByIdAndPassword($uid, $key);
 
 	if ($user) {
 		return true;

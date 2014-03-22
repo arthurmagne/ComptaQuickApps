@@ -24,7 +24,7 @@
   	<% _.each(accounts, function(account, cpt) { %>
       <% var id = account.get("id"); %>
       <tr class="clickableRow" href="#/opeTab/<%= id %>" data-value="<%= id %>">
-        <td><%= id %></td>
+        <td><%= account.get("account_number") %></td>
         <td class="account-name-col"><%= account.get("account_name") %></td>
         <td><%= account.get("balance") %></td>
         <td class="delete-account" data-value="<%= id %>">Supprimer</td>

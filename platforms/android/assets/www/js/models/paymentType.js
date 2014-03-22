@@ -15,7 +15,7 @@ define([
     },
 	url: function() {
 		if (this.type_id){
-			return 'http://netmove.fr/ComptaQuick/api/index.php/paymentType' + this.type_id;
+			return 'paymentType' + this.type_id;
 		}
 		console.log("Aucun id");
 	}

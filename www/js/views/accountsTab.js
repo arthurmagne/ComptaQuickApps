@@ -7,9 +7,11 @@ define([
 	'bootstrap-dialog.min',
 	'text!../../templates/accountsTab.html',
 	'collections/accounts',
-	'models/account'
+	'models/account',
+	'collections/operations',
+  	'models/paymentType'
 	], 
-	function(bootstrap, holder, $, _, Backbone, dialog, accountsTabTemplate, Accounts, Account){
+	function(bootstrap, holder, $, _, Backbone, dialog, accountsTabTemplate, Accounts, Account, Operations, PayementList){
 		var AccountsTab = Backbone.View.extend({
 			events: {
 				'click .clickableRow': 'detailAccount',
@@ -23,19 +25,13 @@ define([
 
 			render: function () {
 				console.log("Account tab view");
-				this.accounts = new Accounts();
 				var that = this;
-
-		        this.accounts.fetch({
-		        	success: function (accounts) {
-		        		console.log("accounts fetch success");
-		        		var template = _.template(accountsTabTemplate, {accounts: accounts.models});
-		        		that.$el.html(template);
-		        	}
-		        });
-
-
+				var template = _.template(accountsTabTemplate, {accounts: window.accounts.models});
+                this.$el.html(template);
+                console.log("GLOBAL ",window.accounts);
     		},
+
+    		
 
     		detailAccount: function (event) {
             	this.close();
@@ -51,8 +47,17 @@ define([
 		            if(result) {
 		                var accountId = $(event.currentTarget).data('value');
 		    			console.log("Delete account with id : ", accountId);
+		    			
+		    			console.log("Delete account AAAAA : ", window.accounts.get(accountId));
+
 		    			// remove model (from server and collection by bubbling)
-		    			that.accounts.get(accountId).destroy();
+		    			// TODO -> save the deletion somewhere
+		    			if (window.isOnline()){
+		    				window.accounts.get(accountId).destroy();
+		    			}else{
+			    			window.deletedAccounts.push(accountId);
+			    			window.accounts.remove(window.accounts.get(accountId));
+			    		}
 
 		    			// remove row from tab
 		    			that.$el.find('.clickableRow[data-value='+accountId+']').remove();
@@ -106,21 +111,22 @@ define([
 		    		return ;
 		    	}
 		    	// on update l'account sur le serveur
+		    	var account = window.accounts.get(accountId);
+				account.set('account_name', accountName);
+		    	if (window.isOnline()){
+			    	account.save(null, {
+				        success: function (account){
 
-		    	var account = new Account({id: accountId, account_name: accountName});
-		    	account.save(null, {
-			        success: function (account){
+				          console.log("Account push au serveur avec succès");
+				          console.log(account);			          
+				          
 
-			          console.log("Account push au serveur avec succès");
-			          console.log(account);			          
-			          
-
-			        },
-			        error: function (){
-			          console.log("Ann error occured");
-			        }
-			      });
-
+				        },
+				        error: function (){
+				          console.log("Ann error occured");
+				        }
+				      });
+			    }
 		    	accountNameTag.html(accountName);
 		    	editAccountBtn.html("Éditer");
 		    	editAccountBtn.removeClass("valid-edit");

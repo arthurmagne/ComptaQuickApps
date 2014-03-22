@@ -61,4 +61,14 @@
 }
 
 
-
+.import-data {
+	height:140px;
+	overflow-y:auto;
+	display:block; 
+	padding: 9.5px; 
+	margin: 0 0 10px; 
+	line-height: 1.428571429; 
+	color: #333;  
+	background-color: whiteSmoke; 
+	border: 1px solid #D9DBF8; border-radius: 4px;
+}

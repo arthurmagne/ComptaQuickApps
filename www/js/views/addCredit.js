@@ -10,7 +10,7 @@ define([
   'collections/operations',
   'models/operation'
   ], function(bootstrap, holder, $, _, Backbone, PaymentTypeListView, AccountListView, AddOperationFormView, Operations, Operation){
-    var addDebitPage = Backbone.View.extend({
+    var addCreditPage = Backbone.View.extend({
   	  events: {
         'click #submit_btn': 'validerOp'
       },
@@ -48,6 +48,7 @@ define([
     		operation_date: this.addOperationFormView.getOpDate(),
     		operation_name: this.addOperationFormView.getOpName(),
     		operation_desc: this.addOperationFormView.getOpDesc(),
+    		type_name: this.paymentTypeListView.getTypeName(),
     		is_credit: "1",
     		value: this.addOperationFormView.getOpValue()
       };
@@ -56,7 +57,6 @@ define([
     validerOp: function (event) {
       event.preventDefault(); 
       console.log("creating credit op ...");
-
 	  
 	  var that = this;
       var error_msg = '';
@@ -103,11 +103,14 @@ define([
 		this.addOperationFormView.setErrorOpValue(true);
 		console.log("problème de valeur vide");
 	  }
-	  else if(isNaN(_data.value)) {
-        error_msg += "Le montant de l'opération doit être un nombre. <br>";
+	  else if(isNaN(_data.value) || _data.value < 0) {
+        error_msg += "Le montant de l'opération doit être un nombre positif. <br>";
 		this.addOperationFormView.setErrorOpValue(true);
 		console.log("problème de valeur autre que nombre");
       }
+
+      
+
 
       this.error_msg.html(error_msg);
 
@@ -116,21 +119,46 @@ define([
       }
 	  	  
       var operation = new Operation(_data);
-	  operation.save(null, {
-		success: function () {
-			  console.log("Operation POST avec succès");
-			  console.log(operation);
-			  $(that.el).empty();
-			  $(that.el).html("<h2 class='text-center text-muted add-feedback'>Operation de Crédit ajouté avec succès</h2><hr>");
-			  setTimeout(function(){
-				that.close();
-				Backbone.View.prototype.goTo('#/accountList');
-			  },2000);
-			},
-        error: function (){
-          console.log("Ann error occured");
-        }
-	  });
+      if (window.isOnline()){
+		  operation.save(null, {
+			success: function (operation) {
+				  console.log("Operation POST avec succès");
+				  console.log(operation);
+				  $(that.el).empty();
+				  $(that.el).html("<h2 class='text-center text-muted add-feedback'>Operation de Crédit ajouté avec succès</h2><hr>");
+      			  window.operationsTab[operation.get("account_id")].add(operation);
+      			  var balance = window.accounts.get(_data.account_id).get('balance');
+      			  window.accounts.get(_data.account_id).set('balance',parseInt(balance)+parseInt(_data.value));
+				  setTimeout(function(){
+						that.close();
+						Backbone.View.prototype.goTo('#/opeTab/'+_data.account_id);
+				  },2000);
+				},
+	        error: function (){
+	          console.log("Ann error occured");
+	        }
+		  });
+		}else{
+        // set temporary id to work with this new model like it was real
+        var uniqueId = new Date();
+        uniqueId = uniqueId.getTime();
+        console.log("UniqueId : ",uniqueId);
+        operation.set("id",uniqueId);
+        console.log("DEBUG OPERATION OFFLINE : ",operation);
+        console.log("DEBUG OPERATION OFFLINE account id : ",this.accountListView.getAccount());
+        var balance = window.accounts.get(_data.account_id).get("balance");
+        window.accounts.get(_data.account_id).set("balance",parseInt(balance)+parseInt(_data.value));
+      	
+      	window.operationsTab[this.accountListView.getAccount()].add(operation);
+        console.log("DEBUG OPERATION TAB : ",window.operationsTab);
+
+        $(that.el).empty();
+				  $(that.el).html("<h2 class='text-center text-muted add-feedback'>Operation de Crédit ajouté avec succès</h2><hr>");
+				 	setTimeout(function(){
+						that.close();
+						Backbone.View.prototype.goTo('#/opeTab/'+_data.account_id);
+				  },2000);
+      }
 
     },
 	
@@ -141,5 +169,5 @@ define([
 
 	});
 
-  return addDebitPage;
+  return addCreditPage;
 });

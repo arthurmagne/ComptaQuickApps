@@ -9,16 +9,18 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#/perso">ComptaQuick</a>
+      <a class="navbar-brand" href="#/accountList">ComptaQuick</a>
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"> <%= user.firstname %>  <%= user.lastname %></a></li>
+        <li><a href="#" id="sync" class="online">Online</a></li>
+        <li><a href="#" id="syncBtn" >Synchroniser</a></li>
+        <li><a href="#" id="username"> <%= user.firstname %>  <%= user.lastname %></a></li>
         <li><a href="#" id="logout">Logout</a></li>
 
       </ul>
       <form class="navbar-form navbar-left">
-        <input type="text" class="form-control" placeholder="Recherche...">
+        <input type="text" class="form-control" id="search-by-tag" placeholder="Recherche par tag ...">
       </form>
     </div>
   </div>
@@ -31,7 +33,7 @@
       <ul class="nav nav-sidebar">
         <li class="perso active"><a href="#/accountList">Liste des comptes</a></li>
         <li class="addAccount"><a href="#/addAccount">Créer un compte</a></li>
-        <li class="graphs"><a href="#/graphs">Suivi Budget</a></li>
+        <li class="graphs" id="graph-btn"><a href="#/graphs">Suivi Budget</a></li>
         <li class="Operations drop-down">
           <a href="#" class="drop-down-toggle">Opération <b class="caret"></b></a>
           <ul class="drop-down-menu">
@@ -40,9 +42,7 @@
             <li class="addCredit"><a href="#/addCredit">Crédit</a></li>
           </ul>
         </li>
-        <li><a href="#">Épargne programmée</a></li>
-        <li class="importCSV"><a href="#/importCSV">Importer</a></li>
-        <li><a href="#">Aide</a></li>
+        <li class="importCSV" id="import-btn"><a href="#/importCSV">Importer</a></li>
       </ul>        
        
     </div>

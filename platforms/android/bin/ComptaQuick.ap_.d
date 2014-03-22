@@ -13,6 +13,7 @@
 /Users/arthur/Sites/comptaQuickApp/platforms/android/bin/res/drawable-xhdpi/icon.png \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/api \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/apps \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/composer.json \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/composer.lock \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/composer.phar \
@@ -529,6 +530,7 @@
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/api/vendor/slim/slim/tests/Middleware/PrettyExceptionsTest.php \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/api/vendor/slim/slim/tests/Middleware/SessionCookieTest.php \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/api/vendor/slim/slim/tests/templates/test.php \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/apps/ComptaQuick.apk \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/css/addOperation.css \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/css/bootstrap-dialog.min.css \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/css/dashboard.css \
@@ -555,8 +557,14 @@
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/dist/js/bootstrap.min.js \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/dist/js/docs.min.js \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/img/app-store-icon.png \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/img/favicon2.png \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/img/google-play-icon.png \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/img/left-arrow.png \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/img/logo.png \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/img/right-arrow.png \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/img/splash.png \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/img/title.png \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/img/wallpaper.jpg \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/app.js \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/boilerplate.js \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/bootstrap-dialog.js \
@@ -574,6 +582,8 @@
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/collections/paymentTypes.js \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/backbone \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/backbone_auth \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/backbone_dualstorage \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/backbone_offline \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/backbone_rails \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/highcharts \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/jquery \
@@ -581,6 +591,8 @@
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/underscore \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/backbone/backbone.js \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/backbone_auth/backbone.basicauth.js \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/backbone_dualstorage/backbone.dualstorage.amd.js \
+/Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/backbone_offline/backbone.offline.js \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/backbone_rails/backbone_rails_sync.js \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/highcharts/highcharts.js \
 /Users/arthur/Sites/comptaQuickApp/platforms/android/assets/www/js/libs/jquery/jquery.js \

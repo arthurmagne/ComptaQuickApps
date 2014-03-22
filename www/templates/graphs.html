@@ -3,15 +3,15 @@
   <p class="error-msg"></p>
   <div class="form-group">
   	<label class="checkbox-inline">
-			<input type="radio" name="graphType" value="op" class="display-op-form" checked> 
+			<input type="radio" name="graphType" value="op" class="display-op-form hide-detail-tag" checked> 
 			Suivis des opérations
 		</label>
 		<label class="checkbox-inline">
-			<input type="radio" name="graphType" class="hide-op-form" value="balance">
+			<input type="radio" name="graphType" class="hide-op-form hide-detail-tag" value="balance">
 			Suivis de budget
 		</label>
 		<label class="checkbox-inline">
-			<input type="radio" name="graphType" class="hide-op-form" value="pie"> 
+			<input type="radio" name="graphType" class="hide-op-form tag-form" value="pie"> 
 			Détail des opérations
 		</label>
   </div>
@@ -72,5 +72,7 @@
 <hr>
 
 <div id="graphs"></div>
+<p class="text-center detail-tag-container"><button class="btn btn-primary btn-lg detail-tag hide">Détails</button></p>
+<div id="opeTab"></div>
 
 </form>

@@ -32,11 +32,12 @@ define([
     connectionAuto: function () {
       event.preventDefault(); // Don't let this button go to the login page
       console.log("Try to connect auto");
-      var url = 'http://netmove.fr/ComptaQuick/api/index.php/loginAuto';
+      var url = 'loginAuto';
       var that = this;
       $.ajax({
             url:url,
             type:'GET',
+            crossDomain: true,
             statusCode: {
               200: function (response) {
                 console.log("connection automatique réussie");

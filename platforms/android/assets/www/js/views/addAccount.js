@@ -5,8 +5,9 @@ define([
   'underscore',
   'backbone',
   'text!../../templates/addAccount.html',
-  'models/account'
-  ], function(bootstrap, holder, $, _, Backbone, addAccountTemplate, Account){
+  'models/account',
+  'collections/operations'
+  ], function(bootstrap, holder, $, _, Backbone, addAccountTemplate, Account, Operations){
   var HomePage = Backbone.View.extend({
     events: {
       'submit .add-account-form': 'createAccount'
@@ -54,20 +55,29 @@ define([
       var _data = this.attributes();
       console.log(_data);
 
+
       if (!_data.account_name){
         error_msg += 'Veuillez indiquer un nom de compte.<br>';
         this.name.addClass("form-error");
       }
       // check if the number is an integer
-      var intRegex = /^\+?[1-9]\d*$/;
+      var intRegex = /^\+?[0-9]\d*$/;
       if( (_data.account_number != "" ) && !(intRegex.test(_data.account_number))) {
         error_msg += 'Le numéro de compte doit être un entier positif.<br>';
+        this.number.addClass("form-error");
+      }
+
+      if (!_data.account_number){
+        error_msg += 'Veuillez indiquer un numéro de compte.<br>';
         this.number.addClass("form-error");
       }
       // ckeck if the balance is a number
       if( (_data.balance != "") && (isNaN(_data.balance))) {
         error_msg += 'Le solde du compte doit être un nombre.<br>';
         this.balance.addClass("form-error");
+      }
+      if (_data.balance == ''){
+        _data.balance = 0;
       }
 
       this.error_msg.html(error_msg);
@@ -77,27 +87,49 @@ define([
       }
 
       var account = new Account(_data);
-      account.save(null, {
-        success: function (account){
+      if (window.isOnline()){
+        account.save(null, {
+          success: function (account){
 
-          console.log("Account push au serveur avec succès");
-          console.log(account);
-          $(that.el).empty();
-          
-          $(that.el).html("<h2 class='text-center text-muted add-feedback'>Compte ajouté avec succès</h2><hr>");
-          
-          setTimeout(function(){
-            that.close();
-            Backbone.View.prototype.goTo('#/accountList');
-          },2000);
-        },
-        error: function (){
-          console.log("Ann error occured");
-            error_msg += 'Ce numéro de compte existe déjà.<br>';
-            that.number.addClass("form-error");
-            that.error_msg.html(error_msg);
-        }
-      });
+            console.log("Account push au serveur avec succès");
+            console.log(account);
+            $(that.el).empty();
+            
+            $(that.el).html("<h2 class='text-center text-muted add-feedback'>Compte ajouté avec succès</h2><hr>");
+            var operations = new Operations({accountId: account.get("id")});
+            window.operationsTab[account.get("id")] = operations;
+            window.accounts.add(account);
+            
+            setTimeout(function(){
+              that.close();
+              Backbone.View.prototype.goTo('#/accountList');
+            },2000);
+          },
+          error: function (){
+            console.log("Ann error occured");
+              error_msg += 'Une erreur est survenue.<br>';
+              that.error_msg.html(error_msg);
+          }
+        });
+      }else{
+        // set temporary id to work with this new model like it was real
+        var uniqueId = new Date();
+        uniqueId = uniqueId.getTime();
+        console.log("UniqueId : ",uniqueId);
+        account.set("id",uniqueId);
+        // create an empty collection for this model
+        var operations = new Operations({accountId: uniqueId});
+        window.operationsTab[uniqueId] = operations;
+        window.accounts.add(account);
+        $(that.el).empty();
+            
+        $(that.el).html("<h2 class='text-center text-muted add-feedback'>Compte ajouté avec succès</h2><hr>");
+        setTimeout(function(){
+          that.close();
+          Backbone.View.prototype.goTo('#/accountList');
+        },2000);
+      }
+
       
     },
 

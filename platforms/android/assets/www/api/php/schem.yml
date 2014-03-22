@@ -1,6 +1,6 @@
 User:
   columns:
-    user_id:
+    id:
       type: integer
       primary: true
       autoincrement: true
@@ -14,10 +14,12 @@ User:
       type: string(255)    
 Account:
   columns:
-    account_id:
+    id:
       type: integer
       primary: true
       autoincrement: true
+    account_number:
+      type: integer
     user_id:
       type: integer
     account_name:
@@ -28,13 +30,13 @@ Account:
   relations:
     User:
       local: user_id
-      foreign: user_id
+      foreign: id
       type: one
       foreignType: many
 
 PaymentType:
   columns:
-    type_id:
+    id:
       type: integer
       primary: true
       autoincrement: true
@@ -62,12 +64,12 @@ Operation:
   relations:
     Account:
       local: account_id
-      foreign: account_id
+      foreign: id
       type: one
       foreignType: many
       onDelete: Cascade
     PaymentType:
       local: type_id
-      foreign: type_id
+      foreign: id
       type: one
       foreignType: many

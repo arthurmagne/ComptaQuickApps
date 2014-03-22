@@ -8,21 +8,29 @@ define([
  
     initialize: function(options) {
 
-        if (options.id){
-            this.accountId = options.id;
+      this.on('change', 
+        function(){
+          this.updated_at = new Date();
         }
+        , this);
+
+      if (options.id){
+        this.accountId = options.id;
+        this.set('id', options.id);
+
+      }
         
     },
     url: function() {
         if (this.get("account_id")){
-            return 'http://netmove.fr/ComptaQuick/api/index.php/account/' + this.get("account_id");
+            return 'account/' + this.get("account_id");
         }// update
         if (this.get("id")){
-            return 'http://netmove.fr/ComptaQuick/api/index.php/account/' + this.get("id");
+            return 'account/' + this.get("id");
         }
 
         console.log("Aucun accountId");
-        return 'http://netmove.fr/ComptaQuick/api/index.php/editAccount';
+        return 'editAccount';
 		
     } 	
     });

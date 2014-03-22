@@ -8,20 +8,21 @@ define([
 	'views/graphs',
 	'collections/operations',
 	'models/operation',
+	'collections/accounts',
 	'models/account',
 	'views/addDebit',
 	'views/addCredit',
 	'highcharts'
 	], 
-	function(bootstrap, holder, $, _, Backbone, opeTabTemplate, GraphView, Operations, Operation, Account, AddDebitView, AddCreditView, Highcharts){
+	function(bootstrap, holder, $, _, Backbone, opeTabTemplate, GraphView, Operations, Operation, Accounts, Account, AddDebitView, AddCreditView, Highcharts){
 		var OpeTab = Backbone.View.extend({
 			events: {
 				'click .hashtag-opetab': 'graphHashtag',
 				'click .account-name-ope-tab .name': 'renameAccount',
-				'keypress :input': 'logKey',
-				'click .delete-op': 'deleteOp',
-				'click .edit-op': 'editOp',
-				'click .valid-op-edit': 'validEdit',
+				'keypress .new-name-input': 'logKey',
+				'click  #ope-tab-detail-account .delete-op': 'deleteOp',
+				'click  #ope-tab-detail-account .edit-op': 'editOp',
+				'click  #ope-tab-detail-account .valid-op-edit': 'validEdit',
 				'click .add-debit': 'addOpDebit',
 				'click .add-credit': 'addOpCredit'
 			},
@@ -32,36 +33,49 @@ define([
 				console.log("operation view");
 				var that = this;
 				this.accountId = options.account_id;
-				this.operations = new Operations({accountId: this.accountId});
-				var account = new Account({account_id: this.accountId});
-
-				account.fetch({
-					success: function (account) {
-						console.log("account recupéré : ",account);
-						that.account = account;
-						that.accountBalance = account.get("balance");
-						that.operations.fetch({
-				        	success: function (operations) {
-								console.log("operations recupérées : ",operations);
-								var extendObject = $.extend({},account.attributes,operations);
-				        		var template = _.template(opeTabTemplate, {object: extendObject});
-				        		that.$el.html(template);
-				        		that.initGraphOptions(operations);
-				        		
-				        	},
-							error: function() {
-								console.log("Error during fetch account operation");
-							}
-		       			});
-					},
-					error: function() {
-						console.log("Error during fetch account operation");
-					}
-				});
 				
+				this.getOperations();
+			},
 
-		        
-   			},
+			getOperations: function () {
+				//DEBUG
+				console.log('getOperation: accounts =', window.accounts);
+				console.log('getOperation: this.accountId =', this.accountId)
+				var that = this;
+				this.account = window.accounts.get(this.accountId);
+				//DEBUG
+				console.log('getOperation: account =',this.account);
+
+				this.accountBalance = this.account.get("balance");
+				this.operations = window.operationsTab[this.accountId];
+
+				// get the right operations
+				if (navigator.onLine){
+					//this.operations = new Operations({accountId: this.accountId});
+					this.operations.fetch({
+						success: function (operations) {
+							console.log("Operations recupérées : ",operations);
+							var extendObject = $.extend({},that.account.attributes,operations);
+					    	var template = _.template(opeTabTemplate, {object: extendObject});
+					    	that.$el.html(template);
+					    	that.initGraphOptions(operations);
+						},
+						error: function() {
+							console.log("Error during fetch account operation: getOperation");
+						}
+		   			});
+				}else{
+
+					
+					console.log("OPERATIONS ",this.operations);
+
+					var extendObject = $.extend({},this.account.attributes,this.operations);
+			    	var template = _.template(opeTabTemplate, {object: extendObject});
+			    	this.$el.html(template);
+			    	this.initGraphOptions(this.operations);
+			    }
+				
+			},   			
 
    			initGraphOptions: function (operations) {
    				// options for graph
@@ -73,7 +87,12 @@ define([
 			            text: 'Opérations du mois'
 			        },
 			        xAxis: {
-			            type: 'datetime'
+			            type: 'datetime',
+			            plotLines: [{
+						    color: 'red', // Color value
+						    value: Date.parse(new Date()), // Value of where the line will appear
+						    width: '1' // Width of the line    
+						  }]
 			        },
 			        yAxis: {
 			            title: {
@@ -92,20 +111,26 @@ define([
            		 }]
       		  	};
 
-
+			    
    				var balance 	= this.accountBalance;
    				var listOpe 	= operations.toArray();
    				var evolutionX 	= []; 
    				var evolutionY 	= []; 
    				var evolutionOp = [];
+   				var today = new Date();
 
    				listOpe = listOpe.reverse();
 
-   				// evolutionY.push(this.accountBalance);
-   				// evolutionX.push(Date.parse(new Date()));
-   				// evolutionOp.push("Solde actuel");
+   				evolutionY.push(parseInt(balance));
+   				//today.setTime(today.getTime()-24*3600*1000);
+   				evolutionX.push(Date.parse(today));
+   				evolutionOp.push("Nouveau solde");
    				
    				for(var i = 0; i < listOpe.length; i++){
+			    	if ((typeof listOpe[i].get("operation_name") == 'undefined')){
+			    		continue ;
+			    	}
+
    					// we put the previous balance in the tab
    					evolutionY.push(parseInt(balance));
    					if(listOpe[i].get("is_credit") == 1){
@@ -117,18 +142,32 @@ define([
    					evolutionOp.push(listOpe[i].get("operation_name"));
    				}
 
+   				evolutionY.push(parseInt(balance));
+   				today.setTime(today.getTime()-30*24*3600*1000);
+   				evolutionX.push(Date.parse(today));
+   				evolutionOp.push("Ancien solde");
+
    				evolutionX.reverse();
    				evolutionY.reverse();
    				evolutionOp.reverse();
 
    				var jsonArray = [];
    				for(var i = 0; i < evolutionX.length; i++){
-			        jsonArray.push({
-			        	x: evolutionX[i],
-			        	name: evolutionOp[i],
-			        	color: '#483D8B',
-				        y: parseInt(evolutionY[i])
-				    });
+   					if(evolutionY[i] < 0){
+				        jsonArray.push({
+				        	x: evolutionX[i],
+				        	name: evolutionOp[i],
+				        	color: 'red',
+					        y: parseInt(evolutionY[i])
+					    });
+   					}else {
+				        jsonArray.push({
+				        	x: evolutionX[i],
+				        	name: evolutionOp[i],
+				        	color: '#483D8B',
+					        y: parseInt(evolutionY[i])
+					    });
+					}
 			    };
 
 	    		graphOptions.series[0].data = jsonArray;
@@ -141,16 +180,22 @@ define([
 		    	var accountNameTag = $('.account-name-ope-tab');
 		    	var accountName = accountNameTag.find('.name').html();
 
-		    	accountNameTag.html("<input class='form-control' type='text' value='"+accountName+"'/>");
+		    	accountNameTag.html("<input class='form-control new-name-input' type='text' value='"+accountName+"'/>");
    			},
 
    			graphHashtag: function(event){
    				event.preventDefault();
+   				if (!navigator.onLine){
+		            BootstrapDialog.alert("Cette partie du site n'est pas disponible sans connexion");
+		            return ;
+		          }
    				var hashtagName = $(event.currentTarget).attr("href");
-   				//console.log(hashtagName);
+   				console.log("hashtagName : ", hashtagName);
+
 
 				var graphview = new GraphView();
-				graphview.render({hashtagName : hashtagName, accountId : this.accountId, operations : this.operations});
+				graphview.render({hashtagName : hashtagName, accountId : this.accountId});
+
    			},
 
     		deleteOp: function (event) {
@@ -160,13 +205,34 @@ define([
     			BootstrapDialog.confirm('Voulez vous vraiment supprimer cette opération?', function(result){
 		            if(result) {
 		                var opId = $(event.currentTarget).data('value');
+		                var value = $(event.currentTarget).data('op');
 		    			console.log("Delete op with id : ", opId);
 		    			// remove model (from server and collection by bubbling)
-		    			that.operations.get(opId).destroy();
+			    		window.deletedOperations.push(opId);
+			    		window.operationsTab[that.accountId].remove(window.operationsTab[that.accountId].get(opId));
+
+			    		// balance maj
+			    		var balance = window.accounts.get(that.accountId).get('balance');
+      			  		window.accounts.get(that.accountId).set('balance',parseInt(balance)-parseInt(value));
+		    			if (window.isOnline()){
+
+		    				that.operations.get(opId).destroy({ 
+		    					success: function () {
+		    						that.$el.find('.op-row[data-value='+opId+']').remove();
+		    						that.render({account_id: that.accountId});
+		    					},
+		    					error: function () {
+		    						console.log("DEBUG : Error during destroy deleteOp");
+		    					}
+		    				});
+		    			}else{
+		    				console.log("AaAAAAAAAAAAAAAÀ", that.accountId);
+							that.$el.find('.op-row[data-value='+opId+']').remove();
+		    				that.render({account_id: that.accountId});
+			    		}
 
 		    			// remove row from tab
-		    			//that.$el.find('.op-row[data-value='+opId+']').remove();
-		    			that.render({account_id: that.accountId});
+		    			
 		            
 		            }else {
 		                console.log("Suppression annulée");
@@ -225,23 +291,25 @@ define([
 
 		    	var operation = this.operations.get(opId);
 		    	operation.set('operation_name', opName);
-		    	operation.save(null, {
-			        success: function (operation){
+		    	if (window.isOnline()){
+			    	operation.save(null, {
+				        success: function (operation){
 
-			          console.log("Operation push au serveur avec succès");
-			          console.log(operation);			          
-			          
+				          console.log("Operation push au serveur avec succès");
+				          console.log(operation);			          
+				          
 
-			        },
-			        error: function (){
-			          console.log("An error occured");
-			        }
-			      });
+				        },
+				        error: function (){
+				          console.log("An error occured");
+				        }
+				      });
+			    }
 
 		    	opNameTag.html(opName);
 		    	console.log(opName);
 		    	editOpBtn.html("Éditer");
-		    	editOpBtn.removeClass("valid-edit");
+		    	editOpBtn.removeClass("valid-op-edit");
 		    	editOpBtn.addClass("edit-op");
     		},
 
@@ -303,7 +371,12 @@ define([
 			},
 
 			drawGraphs: function (graphOptions) {
-				this.$el.find('#graphs').highcharts(graphOptions);
+
+				if ((this.operations.length == 0) || ((typeof this.operations.at(0).get("operation_name") == 'undefined') && this.operations.length == 1)) {
+					this.$el.find('#graphs').remove();
+				}else{
+					this.$el.find('#graphs').highcharts(graphOptions);
+				}
 				
 			}
 			

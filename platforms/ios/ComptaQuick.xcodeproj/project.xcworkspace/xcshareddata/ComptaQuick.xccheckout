@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>76B25E26-039E-428A-88DA-326E5429E420</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ComptaQuick</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E0B77AC2-553E-4B25-AA34-8FDC4ACD487B</key>
+		<string>https://github.com/arthurmagne/ComptaQuickApps.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>platforms/ios/ComptaQuick.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E0B77AC2-553E-4B25-AA34-8FDC4ACD487B</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/arthurmagne/ComptaQuickApps.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E0B77AC2-553E-4B25-AA34-8FDC4ACD487B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E0B77AC2-553E-4B25-AA34-8FDC4ACD487B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>comptaQuickApp</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -1,17 +1,27 @@
-<h1 class="page-header">Détail compte</h1>
+<% if (typeof object != 'undefined') { %>
+<div id="ope-tab-detail-account">
+  <h1 class="page-header">Détail compte</h1>
 
-<p class="error-msg"></p>
-<h2 class="sub-header account-name-ope-tab"><span class="name"><%= object.account_name %></span><span class="info text-muted">Cliquez pour modifier</span></h2>
-<h3>Solde : <%= object.balance %> €</h3>
-<div id="graphs"></div>
+  <p class="error-msg"></p>
+  <h2 class="sub-header account-name-ope-tab"><span class="name"><%= object.account_name %></span><span class="info text-muted">Cliquez pour modifier</span></h2>
+  <h3>Solde : <%= object.balance %> €</h3>
+  <div id="graphs"></div>
 
 
-<% var operations = object.models; %>
-<% console.log(object.account_name); %>
-<% if (operations.length == 0) { %>
+  <% var operations = object.models; %>
+<% } %>
+
+<% if (((typeof object != 'undefined') && (operations.length == 0)) || ((typeof operations[0].get("operation_name") == 'undefined') && operations.length ==  1)) { %>
     <h2 class="text-center text-muted">Aucune opération n'a été trouvée</h2>
-<% }else{ %>
-
+    <p class="text-center"><button class="add-debit btn btn-default">Débiter</button>
+    <button class="add-credit btn btn-default">Créditer</button></p>
+<% }else if ((typeof object == 'undefined') && (operations.length == 0)) {}else{ %>
+<% if (operations.length > 15) { %>
+   <p class="text-center button-operation-container">
+    <button class="add-credit btn btn-primary btn-lg">Créditer</button>
+    <button class="add-debit btn btn-primary btn-lg">Débiter</button>
+  </p>
+<% } %>
 <p class="error-msg"></p>
 
 <div class="table-responsive">
@@ -29,31 +39,40 @@
     </thead>
     <tbody>
     <% _.each(operations, function(operation, cpt) { %>
+      <% if (typeof operation.get("operation_name") == 'undefined') { return; } %>
       <tr class="op-row" data-value="<%= operation.get('id') %>">
         <!-- account_id  type_id operation_date  operation_name  operation_desc  is_credit value -->
         <td><%= cpt+1 %></td>
         <td><%= operation.get("operation_date") %></td>
         <td><%= operation.get("type_name") %></td>
         <td class="op-name"><%= operation.get("operation_name") %></td>
+        <% var value; %>
         <% if (operation.get("is_credit") == 1) {%>
           <td class='credit'><%= operation.get("value") %></td>
           <td></td>
+          <% value = operation.get("value"); %>
         <%}else{%>
           <td></td>
           <td class='debit'><%= operation.get("value") %></td>
+          <% value = -operation.get("value"); %>
         <% } %>
-          <td class="op-desc"><%= operation.get("operation_desc").replace(/(^|\W)#([a-z\d][\w-]*)/ig, '<a class=\"hashtag-opetab\" href=\"#/$2\"> #$2</a>') 
+          <td class="op-desc"><%= operation.get("operation_desc").replace(/(^|\W)#([a-z\d][\w-]*)/ig, '<a class=\"hashtag-opetab\" href=\"$2\"> #$2</a>') 
 
           %></td>
-        <td class="delete-op" data-value="<%= operation.get('id') %>">Supprimer</td>
+        <td class="delete-op" data-value="<%= operation.get('id') %>" data-op="<%= value %>">Supprimer</td>
         <td class="edit-op" data-value="<%= operation.get('id') %>">Éditer</td>
       </tr>
     <% }); %>
-      <tr class="add-account-btn">
-        <td colspan="4,5" class="add-debit">Débiter</td>
-        <td colspan="4,5" class="add-credit">Créditer</td>
-      </tr>
+    <% if (typeof object != 'undefined') { %>
+    <% } %>
     </tbody>
-  </table>
+  </table> 
+  <p class="text-center button-operation-container">
+    <button class="add-credit btn btn-primary btn-lg">Créditer</button>
+    <button class="add-debit btn btn-primary btn-lg">Débiter</button>
+  </p>
 </div>
+<% if (typeof object != 'undefined') { %>
+  </div>
+<% } %>
 <% } %>

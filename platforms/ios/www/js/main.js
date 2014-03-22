@@ -12,6 +12,7 @@ require.config({
     holder: 'holder',
     backbone_rails: 'libs/backbone_rails/backbone_rails_sync',
     backbone_auth: 'libs/backbone_auth/backbone.basicauth',
+    backbone_offline: 'libs/backbone_offline/backbone.offline',
     highcharts: 'libs/highcharts/highcharts'
   },
 
@@ -36,7 +37,12 @@ require.config({
         backbone_auth: {
             deps: ['underscore']
         },
-        
+
+        backbone_offline: {
+          deps: ['underscore', 'backbone'],
+          exports: 'Offline'
+        },
+
         highcharts: {
             deps: ['jquery']
         }

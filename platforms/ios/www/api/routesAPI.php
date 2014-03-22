@@ -7,6 +7,11 @@ require_once 'php/config.php';
 
 \Slim\Slim::registerAutoloader();
 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+
+
 $app = new \Slim\Slim();
 
 $app->get('/hello/:name', 'authenticate', function ($name) {
@@ -25,16 +30,19 @@ $app->get('/loginAuto', 'authenticate', function () {
 	global $app;
 	$uid = $app->getEncryptedCookie('uid');
     $key = $app->getEncryptedCookie('key');
-    $user = Doctrine_Core::getTable('User')->findOneByUser_idAndPassword($uid, $key);
+    $user = Doctrine_Core::getTable('User')->findOneByIdAndPassword($uid, $key);
 	$response = $app->response();
     $response['Content-Type'] = 'application/json';  
+    $response->header('Access-Control-Allow-Origin', '*'); 
+    $response->header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, X-authentication, X-client');
+    $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 
 	$user_object = json_encode($user->toArray());
 
 	$response->body($user_object);
 });
 
-$app->get('/accounts', 'authenticate', function () {
+$app->get('/accounts', function () {
 	#echo "Connexion automatique réussie";
 	global $app;
 	$uid = $app->getEncryptedCookie('uid');
@@ -85,27 +93,55 @@ $app->put('/account/operation/:id', 'authenticate', function ($id) {
     // on récupère les données du formulaire
     $body = json_decode($body, true);
 
-    $name = $body['operation_name'];
+    $account_id = $body['account_id'];
+	$type_id = $body['type_id'];
+	$operation_date = $body['operation_date'] ;
+	$operation_desc = $body['operation_desc'];
+	$operation_name = $body['operation_name'];
+	$is_credit = $body['is_credit'];
+	$value = $body['value'];
 
     $operation = Doctrine_Core::getTable('Operation')->findOneById($id);
 
-    $operation->operation_name = $name;
-
-	$response = $app->response();
-
-	if($operation->trySave()){
-		try{
-			$response['Content-Type'] = 'application/json';
-			// on crée notre objet
-			$operation_object = json_encode($operation->toArray());
-			$response->body($operation_object);
- 		} catch (Exception $e) {
-			$app->response()->status(400);
-			$app->response()->header('X-Status-Reason', $e->getMessage());
+    if (!$operation) {
+    	// create new operation
+		$operation = operation($is_credit, $account_id, $value, $type_id, $operation_name, $operation_desc, $operation_date);
+		$operation->id = $id;
+		$response = $app->response();
+		
+		if($operation->trySave()){
+			try{
+				$response['Content-Type'] = 'application/json';
+				$operation_object = json_encode($operation->toArray());
+				$response->body($operation_object);
+			} catch (Exception $e) {
+				$app->response()->status(400);
+				$app->response()->header('X-Status-Reason', $e->getMessage());
+			}
 		}
-	}
-	else{
-		$app->halt(400);
+		else{
+			$app->halt(400);
+		}
+    }else{
+
+	    $operation->operation_name = $operation_name;
+
+		$response = $app->response();
+
+		if($operation->trySave()){
+			try{
+				$response['Content-Type'] = 'application/json';
+				// on crée notre objet
+				$operation_object = json_encode($operation->toArray());
+				$response->body($operation_object);
+	 		} catch (Exception $e) {
+				$app->response()->status(400);
+				$app->response()->header('X-Status-Reason', $e->getMessage());
+			}
+		}
+		else{
+			$app->halt(400);
+		}
 	}
 });
 
@@ -118,14 +154,13 @@ $app->post('/editAccount', 'authenticate', function () {
     // on récupère les données du formulaire
     $body = json_decode($body, true);
 
-    $id 		= $body['account_number'];
+    $account_number 		= $body['account_number'];
     $name 	    = $body['account_name'];
     $balance 	= $body['balance'];
 
 	$account = new Account();
-	if ($id != ""){
-		$account->account_id = $id;
-	}
+
+	$account->account_number = $account_number;
 	$account->account_name = $name;
 	if ($balance != ""){
 		$account->balance = $balance;
@@ -153,7 +188,7 @@ $app->post('/editAccount', 'authenticate', function () {
 });
 
 
-$app->put('/editAccount', 'authenticate', function () {
+$app->put('/account/:id', 'authenticate', function ($id) {
 	global $app;
 	$uid = $app->getEncryptedCookie('uid');
 
@@ -163,9 +198,26 @@ $app->put('/editAccount', 'authenticate', function () {
     $body = json_decode($body, true);
 
     $name 	    = $body['account_name'];
-    $id 	    = $body['id'];
+    if (isset($body['account_number']))
+    	$account_number = $body['account_number'];
+    if (isset($body['balance']))
+    	$balance 	= $body['balance'];
 
-    $account = Doctrine_Core::getTable('Account')->findOneByAccount_id($id);
+    $account = Doctrine_Core::getTable('Account')->findOneById($id);
+    
+    if (!$account) {
+    	// Ce compte a été créé hors ligne
+    	$account = new Account();
+
+		$account->account_number = $account_number;
+		if ($balance != ""){
+			$account->balance = $balance;
+		}else{	
+			$account->balance = 0;
+		}
+		$account->user_id = $uid;
+		$account->id = $id;
+    }
 
     $account->account_name = $name;
 
@@ -197,14 +249,14 @@ $app->get('/paymentTypes', 'authenticate', function () {
 
 });
 	
-$app->get('/operations/:select/:id/:limit/:type/:begin/:end/:payementType', 'authenticate', function ($select, $id, $limit, $type, $begin, $end, $payementType) {
+$app->get('/operations/:select/:id/:limit/:type/:begin/:end/:payementType/:tag', 'authenticate', function ($select, $id, $limit, $type, $begin, $end, $payementType, $tag) {
 	global $app;
 	$uid = $app->getEncryptedCookie('uid');
 
 	if ($select == 'byAccount'){
-		$operations = getOperations($id, $begin, $end, $type, $limit, $payementType);
+		$operations = getOperations($id, $begin, $end, $type, $limit, $payementType, $tag);
 	}else if ($select == 'byUser'){
-		$operations = getOperations(getAccounts($uid), $begin, $end, $type, $limit, $payementType);
+		$operations = getOperations(getAccounts($uid), $begin, $end, $type, $limit, $payementType, $tag);
 	}else{
 		$app->halt(400);
 	}
@@ -218,19 +270,43 @@ $app->get('/operations/:select/:id/:limit/:type/:begin/:end/:payementType', 'aut
 });
 
 $app->delete('/account/operation/:id', 'authenticate', function($id){
+	global $app;
+
     deleteOperation($id);
+
+     $response = $app->response();
+     $response['Content-Type'] = 'application/json';
+     $json = json_encode("delete operation succeed");
+
+	 $response->body($json);
+ });
+
+$app->get('/ping', function(){
+    global $app;
+    $response = $app->response();
+    $response['Content-Type'] = 'application/json';
+    $json = json_encode("pong");
+	$response->body($json);
  });
 
 
 $app->delete('/account/:id', 'authenticate', function ($id) {
 	global $app;
-    $account = Doctrine_Core::getTable('Account')->findOneByAccount_id($id);
+    
+    $account = Doctrine_Core::getTable('Account')->findOneById($id);
+
+    $response = $app->response();
+    $response['Content-Type'] = 'application/json';
+    $json = json_encode($account->toArray());
+
     $account->delete();
+
+	$response->body($json);
 });
 
 $app->get('/account/:id', 'authenticate', function ($id) {
 	global $app;
-    $account = Doctrine_Core::getTable('Account')->findOneByAccount_id($id);
+    $account = Doctrine_Core::getTable('Account')->findOneById($id);
     $response = $app->response();
     $response['Content-Type'] = 'application/json';
     $json = json_encode($account->toArray());
@@ -256,13 +332,13 @@ $app->post('/login', function () {
     // On vérifie ici si l'user existe
     if ($user) {    	
 	    try {
-			$id = $user->user_id;
+			$id = $user->id;
 			$firstname = $user->firstname;
 			$lastname = $user->lastname;
 			$email = $user->email;
-			$app->setEncryptedCookie('uid', $id, '60 minutes');
-			$app->setEncryptedCookie('key', $password, '60 minutes');
-			$app->setEncryptedCookie('uma', $email, '60 minutes');
+			$app->setEncryptedCookie('uid', $id, '120 minutes');
+			$app->setEncryptedCookie('key', $password, '120 minutes');
+			$app->setEncryptedCookie('uma', $email, '120 minutes');
 			$uid = $app->getEncryptedCookie('uid');
     		$key = $app->getEncryptedCookie('key');
     		$uma = $app->getEncryptedCookie('uma');
@@ -315,10 +391,10 @@ $app->post('/subscribe', function () {
 
 	if($user->trySave()){
 	    try {
-	    	$id = $user->user_id;
-			$app->setEncryptedCookie('uid', $id, '60 minutes');
-			$app->setEncryptedCookie('uma', $email, '60 minutes');
-			$app->setEncryptedCookie('key', $password, '60 minutes');
+	    	$id = $user->id;
+			$app->setEncryptedCookie('uid', $id, '120 minutes');
+			$app->setEncryptedCookie('uma', $email, '120 minutes');
+			$app->setEncryptedCookie('key', $password, '120 minutes');
 			$uid = $app->getEncryptedCookie('uid');
 			$key = $app->getEncryptedCookie('key');
     		$uma = $app->getEncryptedCookie('uma');
