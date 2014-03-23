@@ -209,7 +209,6 @@ define([
 		    			console.log("Delete op with id : ", opId);
 		    			// remove model (from server and collection by bubbling)
 			    		window.deletedOperations.push(opId);
-			    		window.operationsTab[that.accountId].remove(window.operationsTab[that.accountId].get(opId));
 
 			    		// balance maj
 			    		var balance = window.accounts.get(that.accountId).get('balance');
@@ -218,6 +217,8 @@ define([
 
 		    				that.operations.get(opId).destroy({ 
 		    					success: function () {
+			    					window.operationsTab[that.accountId].remove(window.operationsTab[that.accountId].get(opId));
+
 		    						that.$el.find('.op-row[data-value='+opId+']').remove();
 		    						that.render({account_id: that.accountId});
 		    					},
@@ -226,6 +227,7 @@ define([
 		    					}
 		    				});
 		    			}else{
+			    			window.operationsTab[that.accountId].remove(window.operationsTab[that.accountId].get(opId));
 		    				console.log("AaAAAAAAAAAAAAAÀ", that.accountId);
 							that.$el.find('.op-row[data-value='+opId+']').remove();
 		    				that.render({account_id: that.accountId});

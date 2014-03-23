@@ -44,6 +44,7 @@ function getOperations($idAccounts, $begin=0 , $end=0, $type=0, $limit=0, $payme
     if($begin == 0 && $end == 0)
     {
       $query->addWhere('(to_days(now()) - to_days(operation_date)) < 30');
+      $query->addWhere('o.operation_date <= now()');
 
     }
     

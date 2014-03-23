@@ -148,6 +148,7 @@
         operation.set("id",uniqueId);
         var balance = window.accounts.get(_data.account_id).get("balance");
         window.accounts.get(_data.account_id).set("balance",parseInt(balance)-parseInt(_data.value));
+        
         window.operationsTab[this.accountListView.getAccount()].add(operation);
 		$(that.el).empty();			  
 		$(that.el).html("<h2 class='text-center text-muted add-feedback'>Operation de débit ajouté avec succès</h2><hr>");

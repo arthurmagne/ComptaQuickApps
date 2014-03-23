@@ -153,11 +153,11 @@ define([
         console.log("DEBUG OPERATION TAB : ",window.operationsTab);
 
         $(that.el).empty();
-				  $(that.el).html("<h2 class='text-center text-muted add-feedback'>Operation de Crédit ajouté avec succès</h2><hr>");
-				 	setTimeout(function(){
-						that.close();
-						Backbone.View.prototype.goTo('#/opeTab/'+_data.account_id);
-				  },2000);
+		  $(that.el).html("<h2 class='text-center text-muted add-feedback'>Operation de Crédit ajouté avec succès</h2><hr>");
+		 	setTimeout(function(){
+				that.close();
+				Backbone.View.prototype.goTo('#/opeTab/'+_data.account_id);
+		  },2000);
       }
 
     },

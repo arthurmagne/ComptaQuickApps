@@ -24,7 +24,10 @@ define([
     url: function() {
         if (this.get("account_id")){
             return 'account/' + this.get("account_id");
-        }// update
+        }
+
+
+        // update
         if (this.get("id")){
             return 'account/' + this.get("id");
         }
